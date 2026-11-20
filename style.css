@@ -1,0 +1,329 @@
+/* ============================================
+   Scam Message Detector - style.css
+   ============================================ */
+
+/* ----- Colours used across the site ----- */
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #3730a3;
+  --bg: #f4f6fb;
+  --card: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --safe: #16a34a;
+  --safe-bg: #ecfdf3;
+  --warning: #d97706;
+  --warning-bg: #fffbeb;
+  --danger: #dc2626;
+  --danger-bg: #fef2f2;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+h2 { margin-bottom: 12px; font-size: 1.4rem; }
+h3 { margin: 8px 0; font-size: 1.05rem; }
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+
+/* ----- Navigation bar ----- */
+.navbar {
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+.logo {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--primary);
+  text-decoration: none;
+}
+nav a {
+  color: var(--text);
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 0.95rem;
+}
+nav a:hover { color: var(--primary); }
+
+/* ----- Hero (top banner) ----- */
+.hero {
+  background: linear-gradient(135deg, var(--primary), #7c3aed);
+  color: white;
+  text-align: center;
+  padding: 60px 0;
+}
+.hero h1 { font-size: 2.4rem; margin-bottom: 12px; }
+.hero p { max-width: 620px; margin: 0 auto 24px; opacity: 0.95; }
+.hero .btn-primary { background: white; color: var(--primary); }
+
+/* ----- Cards (white boxes for each section) ----- */
+.card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 28px;
+  margin: 28px 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  scroll-margin-top: 80px; /* so the navbar does not cover the heading */
+}
+
+/* ----- Form ----- */
+label { display: block; font-weight: 600; margin-bottom: 6px; }
+
+textarea {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+}
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 6px 0;
+}
+.error { color: var(--danger); font-size: 0.9rem; font-weight: 600; }
+
+/* ----- Buttons ----- */
+.buttons { display: flex; gap: 10px; margin-top: 8px; }
+
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s, background 0.2s;
+}
+.btn:active { transform: scale(0.97); }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-light { background: var(--border); color: var(--text); }
+.btn-light:hover { background: #d1d5db; }
+.btn-small { padding: 6px 12px; font-size: 0.85rem; }
+
+/* ----- Sample buttons ----- */
+.samples-title { margin-top: 20px; }
+.samples { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.sample {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+.sample:hover { border-color: var(--primary); color: var(--primary); }
+
+/* ----- Result box ----- */
+.result {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  border-left: 6px solid;
+}
+.result.safe    { background: var(--safe-bg);    border-color: var(--safe); }
+.result.warning { background: var(--warning-bg); border-color: var(--warning); }
+.result.danger  { background: var(--danger-bg);  border-color: var(--danger); }
+
+.result-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.verdict { font-size: 1.5rem; font-weight: 700; }
+.safe .verdict    { color: var(--safe); }
+.warning .verdict { color: var(--warning); }
+.danger .verdict  { color: var(--danger); }
+.score { font-weight: 600; }
+
+/* Bar that fills up with the spam percentage */
+.meter {
+  height: 12px;
+  background: rgba(0, 0, 0, 0.08);
+  border-radius: 6px;
+  margin: 12px 0 16px;
+  overflow: hidden;
+}
+.meter-fill {
+  height: 100%;
+  width: 0;
+  transition: width 0.6s ease;
+}
+.safe .meter-fill    { background: var(--safe); }
+.warning .meter-fill { background: var(--warning); }
+.danger .meter-fill  { background: var(--danger); }
+
+.label { font-weight: 600; font-size: 0.9rem; }
+.preview {
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 6px 0 12px;
+  word-wrap: break-word;
+}
+mark {
+  background: #fecaca;
+  color: #991b1b;
+  padding: 0 3px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.reason { margin-bottom: 8px; }
+
+/* ----- Recent checks ----- */
+.history { list-style: none; margin-top: 12px; }
+.history li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.history li.empty { color: var(--muted); }
+.history-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.badge {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 12px;
+  color: white;
+}
+.badge.safe    { background: var(--safe); }
+.badge.warning { background: var(--warning); }
+.badge.danger  { background: var(--danger); }
+
+/* ----- How it works ----- */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.step {
+  background: var(--bg);
+  padding: 18px;
+  border-radius: 12px;
+}
+.step-num {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  font-weight: 700;
+}
+.step p { font-size: 0.9rem; color: var(--muted); }
+
+/* ----- Model performance ----- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 16px 0 24px;
+}
+.stat {
+  text-align: center;
+  background: var(--bg);
+  padding: 18px;
+  border-radius: 12px;
+}
+.stat span { font-size: 2rem; font-weight: 700; color: var(--primary); }
+.stat small { color: var(--muted); }
+
+.matrix {
+  border-collapse: collapse;
+  margin: 10px 0;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+.matrix th, .matrix td {
+  border: 1px solid var(--border);
+  padding: 10px;
+}
+.matrix th { background: var(--bg); font-size: 0.9rem; }
+.matrix td { font-size: 1.3rem; font-weight: 700; }
+.matrix .good { background: var(--safe-bg); color: var(--safe); }
+.matrix .bad  { background: var(--danger-bg); color: var(--danger); }
+
+/* ----- Safety tips ----- */
+.tips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.tip {
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 12px;
+}
+.tip p { font-size: 0.9rem; color: var(--muted); margin-top: 4px; }
+
+/* ----- Footer ----- */
+footer {
+  text-align: center;
+  padding: 24px 0;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: 20px;
+}
+
+/* ----- Mobile screens ----- */
+@media (max-width: 700px) {
+  nav { display: none; }
+  .hero h1 { font-size: 1.8rem; }
+  .card { padding: 20px; }
+  .steps, .tips { grid-template-columns: 1fr 1fr; }
+  .stats { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px) {
+  .steps, .tips { grid-template-columns: 1fr; }
+  .row { flex-wrap: wrap; }
+}

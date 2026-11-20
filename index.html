@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scam Message Detector</title>
+  <meta name="description" content="Check if an SMS or message is a scam using a Naive Bayes machine learning model.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Top navigation bar ===== -->
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="logo">🛡️ ScamShield</a>
+      <nav>
+        <a href="#checker">Check</a>
+        <a href="#how">How it works</a>
+        <a href="#performance">Accuracy</a>
+        <a href="#tips">Stay safe</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== Intro section ===== -->
+  <section class="hero">
+    <div class="container">
+      <h1>Is this message a scam?</h1>
+      <p>Paste any SMS or chat message. Our AI model, trained on 5,574 real SMS messages,
+        tells you if it looks like spam and shows the words that gave it away.</p>
+      <a href="#checker" class="btn btn-primary">Check a message</a>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <!-- ===== Message checker ===== -->
+    <section id="checker" class="card">
+      <h2>Message Checker</h2>
+      <label for="message">Paste the message below</label>
+      <textarea id="message" rows="5" maxlength="1000"
+        placeholder="Example: Congratulations! You have won a cash prize. Call now to claim..."></textarea>
+
+      <div class="row">
+        <span id="char-count" class="muted">0 / 1000</span>
+        <p id="error" class="error" role="alert"></p>
+      </div>
+
+      <div class="buttons">
+        <button id="check-btn" class="btn btn-primary">Check Message</button>
+        <button id="clear-btn" class="btn btn-light">Clear</button>
+      </div>
+
+      <p class="muted samples-title">Or try a sample:</p>
+      <div class="samples">
+        <button class="sample" data-text="Dear customer, your KYC has expired. Click the link to update your details or your bank account will be blocked today.">🏦 KYC update</button>
+        <button class="sample" data-text="Congratulations! You have won a FREE prize of Rs 50,000. Call now to claim before it expires.">🎁 Prize winner</button>
+        <button class="sample" data-text="You have been selected for a work from home job. Earn 5000 daily. Reply YES to start.">💼 Job offer</button>
+        <button class="sample" data-text="Hey, are we still meeting for lunch tomorrow? Let me know.">🍱 Friend</button>
+        <button class="sample" data-text="Your OTP for login is 482913. Do not share it with anyone.">🔐 OTP</button>
+      </div>
+
+      <!-- Result card: hidden until a message is checked -->
+      <div id="result" class="result" hidden>
+        <div class="result-head">
+          <span id="verdict" class="verdict"></span>
+          <span id="score" class="score"></span>
+        </div>
+        <div class="meter"><div id="meter-fill" class="meter-fill"></div></div>
+        <p class="label">Your message:</p>
+        <p id="preview" class="preview"></p>
+        <p id="reason" class="reason"></p>
+        <p class="muted small">This is a prediction, not a guarantee. When in doubt, contact the company using its official number.</p>
+      </div>
+    </section>
+
+    <!-- ===== Recent checks ===== -->
+    <section class="card">
+      <div class="row">
+        <h2>Recent Checks</h2>
+        <button id="clear-history" class="btn btn-light btn-small">Clear history</button>
+      </div>
+      <p class="muted small">Saved only in your own browser. Nothing is sent to any server.</p>
+      <ul id="history-list" class="history"></ul>
+    </section>
+
+    <!-- ===== How it works ===== -->
+    <section id="how" class="card">
+      <h2>How It Works</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <h3>Learn</h3>
+          <p>The model reads 4,459 labelled messages and counts how often each word appears in spam and in normal messages.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <h3>Split</h3>
+          <p>Your message is broken into words, e.g. "WIN a FREE prize" becomes win, a, free, prize.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <h3>Calculate</h3>
+          <p>Using the Naive Bayes formula, it works out how likely those words are in spam versus normal messages.</p>
+        </div>
+        <div class="step">
+          <span class="step-num">4</span>
+          <h3>Decide</h3>
+          <p>If the spam chance is 50% or more, the message is flagged and the most spam-like words are highlighted.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Model performance (filled in by script.js) ===== -->
+    <section id="performance" class="card">
+      <h2>Model Performance</h2>
+      <p class="muted">Tested on <b id="stat-test">-</b> messages the model never saw while learning
+        (it learned from <b id="stat-train">-</b> messages).</p>
+      <div class="stats">
+        <div class="stat"><span id="stat-accuracy">-</span><p>Accuracy<br><small>answers that were correct</small></p></div>
+        <div class="stat"><span id="stat-precision">-</span><p>Precision<br><small>flagged messages that really were spam</small></p></div>
+        <div class="stat"><span id="stat-recall">-</span><p>Recall<br><small>spam messages that were caught</small></p></div>
+      </div>
+
+      <h3>Confusion Matrix</h3>
+      <table class="matrix">
+        <tr><th></th><th>Predicted Spam</th><th>Predicted Safe</th></tr>
+        <tr><th>Actually Spam</th><td id="cm-tp" class="good">-</td><td id="cm-fn" class="bad">-</td></tr>
+        <tr><th>Actually Safe</th><td id="cm-fp" class="bad">-</td><td id="cm-tn" class="good">-</td></tr>
+      </table>
+      <p class="muted small">Green = correct answers. Red = mistakes (missed spam or false alarms).</p>
+    </section>
+
+    <!-- ===== Safety tips ===== -->
+    <section id="tips" class="card">
+      <h2>How to Spot a Scam Message</h2>
+      <div class="tips">
+        <div class="tip">⏰ <b>Urgency</b><p>"Account blocked today", "offer expires in 1 hour". Scammers rush you so you don't think.</p></div>
+        <div class="tip">🎁 <b>Too good to be true</b><p>Prizes, lotteries and jobs you never applied for.</p></div>
+        <div class="tip">🔗 <b>Unknown links</b><p>Don't click links in messages. Open the official app or website yourself.</p></div>
+        <div class="tip">🔐 <b>Asking for OTP / PIN</b><p>Banks never ask for your OTP, PIN or password by message or call.</p></div>
+        <div class="tip">💸 <b>Asking for payment</b><p>"Pay a small fee to receive your prize" is always a scam.</p></div>
+        <div class="tip">📞 <b>Report it</b><p>In India, report fraud at cybercrime.gov.in or call 1930.</p></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Scam Message Detector · BCA Project by [Your Name] · [College Name]</p>
+      <p class="small">Dataset: SMS Spam Collection, Almeida &amp; Hidalgo, UCI Machine Learning Repository (CC BY 4.0)</p>
+    </div>
+  </footer>
+
+  <!-- The dataset must load first, then the code that uses it -->
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
